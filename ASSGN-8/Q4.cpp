@@ -1,20 +1,10 @@
 #include <iostream>
+#include <vector>
 struct node{
     int data{};
     node *left{nullptr},*right{nullptr};
 };
-node* headnode{nullptr};
-int pre(node* root,int &sum) {
-    if (root==nullptr)return;
-    if(root->left)if(root->left->right==nullptr && root->left->right==nullptr)sum+=root->left->data;
-    pre(root->left,sum);
-    pre(root->right,sum);
-}
-int sumOfLeftLeaves(node* root) {
-        int sum=0;
-        pre(root,sum);
-        return sum;
-    }
+node *headnode{nullptr};
 void insert(int data){
     
     node *temp = new node;
@@ -48,13 +38,33 @@ void insert(int data){
     }
     
 }
+void inorder(node *root,std::vector<int> &order){
+    if(root ==nullptr)return;
+    inorder(root->left,order);
+    order.push_back(root->data);
+    inorder(root->right,order);
+    
+}
+bool check(){
+    std::vector<int> order;
+    inorder(headnode,order);
+
+    for (int i = 1; i < order.size(); i++)
+    {
+        if(order[i-1]>order[i])
+            return false;
+    }
+    return true;
+}
 int main(){
     insert(5);
     insert(2);
     insert(1);
     insert(3);
     insert(4);
+    
+    if(check())std::cout<<"True";
+    else std::cout<<"False";
 
-    int sum = sumOfLeftLeaves(headnode);
     return 0;
 }
